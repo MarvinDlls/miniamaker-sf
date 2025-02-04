@@ -7,8 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
+use Symfony\Component\Mime\Email;
 
 class SecurityController extends AbstractController
 {
@@ -27,8 +29,13 @@ class SecurityController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
-    public function requestLoginLink(LoginLinkHandlerInterface $loginLinkHandler, UserRepository $userRepository, Request $request): Response
+    #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
+    public function requestLoginLink(
+        LoginLinkHandlerInterface $loginLinkHandler, 
+        UserRepository $userRepository, 
+        Request $request, 
+        MailerInterface $mailer
+    ): Response
     {
         // check if form is submitted
         if ($request->isMethod('POST')) {
@@ -41,7 +48,15 @@ class SecurityController extends AbstractController
             $loginLinkDetails = $loginLinkHandler->createLoginLink($user);
             $loginLink = $loginLinkDetails->getUrl();
 
-            // ... send the link and return a response (see next section)
+            $email = (new Email())
+                ->from('contact@miniamaker.fr')
+                ->to($user->getEmail())
+                ->priority(Email::PRIORITY_HIGH)
+                ->subject('Votre lien de connexion!')
+                ->text('Votre lien de connexion!')
+                ->html("<p>Cliquez pour vous connecter : <br>" . $loginLink . "</p>");
+
+            $mailer->send($email);
         }
 
         // if it's not submitted, render the form to request the "login link"
