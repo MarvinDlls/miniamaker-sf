@@ -14,6 +14,6 @@ final class PageController extends AbstractController
         if (!$this->getUser()) {
             return $this->render('page/lp.html.twig');
         }
+        return $this->render('page/homepage.html.twig');
     }
-    return $this->render('page/homepage.html.twig');
 }
