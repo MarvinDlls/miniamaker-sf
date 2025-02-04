@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\LoginHistory;
 use DeviceDetector\DeviceDetector;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,26 +17,23 @@ class SecurityController extends AbstractController
     public function login(
         AuthenticationUtils $authenticationUtils,
         Request $request,
-        // DeviceDetector $deviceDetector
+        EntityManagerInterface $em
         ): Response
     {
-        $userAgent = $request->headers->get('User-Agent');
-        $deviceDetector = new DeviceDetector($userAgent);
+        $deviceDetector = new DeviceDetector($request->headers->get('User-Agent'));
         $deviceDetector->parse();
-        $device = $deviceDetector->getDeviceName();
-        $os = $deviceDetector->getOs();
-        $browser = $deviceDetector->getClient();
 
         if ($this->getUser()) {
             $loginHistory = new LoginHistory();
             $loginHistory
                 ->setUser($this->getUser())
                 ->setIpAddress($request->getClientIp())
-                ->setDevice($device)
-                ->setOs($os['name'])
-                ->setBrowser($browser['name'])
+                ->setDevice($deviceDetector->getDeviceName())
+                ->setOs($deviceDetector->getOs()['name'])
+                ->setBrowser($deviceDetector->getClient()['name'])
                 ;
-            dd($loginHistory);
+            $em->persist($loginHistory);
+            $em->flush();
         }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
