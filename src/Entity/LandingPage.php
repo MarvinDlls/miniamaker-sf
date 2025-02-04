@@ -42,10 +42,6 @@ class LandingPage
         $this->updated_at = new \DateTimeImmutable();
     }
 
-
-    #[ORM\OneToOne(mappedBy: 'landing_page', cascade: ['persist', 'remove'])]
-    private ?IpContent $ipContent = null;
-
     /**
      * @var Collection<int, TagLandingPage>
      */
@@ -114,22 +110,7 @@ class LandingPage
 
 
 
-    public function getIpContent(): ?IpContent
-    {
-        return $this->ipContent;
-    }
 
-    public function setIpContent(IpContent $ipContent): static
-    {
-        // set the owning side of the relation if necessary
-        if ($ipContent->getLandingPage() !== $this) {
-            $ipContent->setLandingPage($this);
-        }
-
-        $this->ipContent = $ipContent;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, TagLandingPage>
