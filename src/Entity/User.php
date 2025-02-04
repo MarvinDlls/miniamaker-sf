@@ -62,7 +62,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
-    #[ORM\OneToOne(mappedBy: 'pro', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'clients')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Subscription $subscription = null;
 
     /**
@@ -284,8 +285,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSubscription(Subscription $subscription): static
     {
         // set the owning side of the relation if necessary
-        if ($subscription->getPro() !== $this) {
-            $subscription->setPro($this);
+        if ($subscription->getClients() !== $this) {
+            $subscription->addClient($this);
         }
 
         $this->subscription = $subscription;

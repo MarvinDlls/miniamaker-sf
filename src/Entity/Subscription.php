@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\SubscriptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
@@ -17,15 +16,21 @@ class Subscription
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'subscription', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $pro = null;
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'subscription')]
+    private Collection $clients;
 
     #[ORM\Column]
     private ?bool $is_active = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?string $amount = null;
+    #[ORM\Column(
+        type: 'decimal', 
+        precision: 7, // Nombre total ex. 10 000,00
+        scale: 2, // Nombre de décimales ex. 2 = 0,00
+        )]
+    private ?int $amount = null;
 
     #[ORM\Column(length: 80)]
     private ?string $frequency = null;
@@ -36,19 +41,6 @@ class Subscription
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\PrePersist]
-    public function setCreatedAtValue()
-    {
-        $this->created_at = new \DateTimeImmutable();
-        $this->updated_at = new \DateTimeImmutable();
-    }
-
-    #[ORM\PreUpdate]
-    public function setUpdatedAtValue()
-    {
-        $this->updated_at = new \DateTimeImmutable();
-    }
-
     /**
      * @var Collection<int, Promo>
      */
@@ -58,23 +50,28 @@ class Subscription
     public function __construct()
     {
         $this->promos = new ArrayCollection();
+        $this->clients = new ArrayCollection();
+        $this->is_active = false;
+        $this->amount = 99.97;
+        $this->frequency = 'monthly';
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getPro(): ?User
-    {
-        return $this->pro;
-    }
-
-    public function setPro(User $pro): static
-    {
-        $this->pro = $pro;
-
-        return $this;
     }
 
     public function isActive(): ?bool
@@ -89,12 +86,12 @@ class Subscription
         return $this;
     }
 
-    public function getAmount(): ?string
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(string $amount): static
+    public function setAmount(int $amount): static
     {
         $this->amount = $amount;
 
@@ -166,4 +163,35 @@ class Subscription
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getClients(): Collection
+    {
+        return $this->clients;
+    }
+
+    public function addClient(User $client): static
+    {
+        if (!$this->clients->contains($client)) {
+            $this->clients->add($client);
+            $client->setSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(User $client): static
+    {
+        if ($this->clients->removeElement($client)) {
+            // set the owning side to null (unless already changed)
+            if ($client->getSubscription() === $this) {
+                $client->setSubscription($this);
+            }
+        }
+
+        return $this;
+    }
 }
+                    

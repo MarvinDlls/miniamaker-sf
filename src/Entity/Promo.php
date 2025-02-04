@@ -31,6 +31,11 @@ class Promo
     #[ORM\JoinColumn(nullable: false)]
     private ?Subscription $subscription = null;
 
+    public function __construct()
+    {
+        
+    }
+
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {

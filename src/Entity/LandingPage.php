@@ -29,6 +29,17 @@ class LandingPage
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    /**
+     * @var Collection<int, Tag>
+     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'landingPages')]
+    private Collection $tags;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {
@@ -42,16 +53,7 @@ class LandingPage
         $this->updated_at = new \DateTimeImmutable();
     }
 
-    /**
-     * @var Collection<int, TagLandingPage>
-     */
-    #[ORM\OneToMany(targetEntity: TagLandingPage::class, mappedBy: 'landing_page')]
-    private Collection $tagLandingPages;
 
-    public function __construct()
-    {
-        $this->tagLandingPages = new ArrayCollection();
-    }
 
 
 
@@ -108,37 +110,33 @@ class LandingPage
         return $this;
     }
 
-
-
-
-
     /**
-     * @return Collection<int, TagLandingPage>
+     * @return Collection<int, Tag>
      */
-    public function getTagLandingPages(): Collection
+    public function getTags(): Collection
     {
-        return $this->tagLandingPages;
+        return $this->tags;
     }
 
-    public function addTagLandingPage(TagLandingPage $tagLandingPage): static
+    public function addTag(Tag $tag): static
     {
-        if (!$this->tagLandingPages->contains($tagLandingPage)) {
-            $this->tagLandingPages->add($tagLandingPage);
-            $tagLandingPage->setLandingPage($this);
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
         }
 
         return $this;
     }
 
-    public function removeTagLandingPage(TagLandingPage $tagLandingPage): static
+    public function removeTag(Tag $tag): static
     {
-        if ($this->tagLandingPages->removeElement($tagLandingPage)) {
-            // set the owning side to null (unless already changed)
-            if ($tagLandingPage->getLandingPage() === $this) {
-                $tagLandingPage->setLandingPage(null);
-            }
-        }
+        $this->tags->removeElement($tag);
 
         return $this;
     }
+
+
+
+
+
+
 }
