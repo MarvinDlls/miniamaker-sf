@@ -68,14 +68,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: true)]
     private ?Subscription $subscription = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     /**
      * @var Collection<int, LoginHistory>
      */
-    #[ORM\OneToMany(targetEntity: LoginHistory::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: LoginHistory::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $loginHistories;
 
     /**
-     * Constructeur pour gérer les attributs non-nullables par défaut
+     * Constructeur pour gérer les 
+     * attributs non-nullables par défaut
      */
     public function __construct()
     {
@@ -83,8 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->is_terms = false;
         $this->is_gpdr = false;
         $this->loginHistories = new ArrayCollection();
+        $this->image = "default.png";
     }
-
+    
     #[ORM\PrePersist]
     public function setCreatedAtValue()
     {
@@ -299,6 +304,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
