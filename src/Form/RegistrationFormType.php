@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,14 +18,15 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
+            ->add('email', EmailType ::class, [
+                'label' => 'Votre adresse e-amil',
+                'label_attr' => [
+                    'class' => 'form-label',
                 ],
+                'attr' => [
+                    'placeholder' => 'exemple@exemple.com',
+                    'class' => 'form-control',
+                ]
             ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
@@ -40,6 +42,27 @@ class RegistrationFormType extends AbstractType
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
+                    ]),
+                ],
+            ])
+            ->add('isMinor', CheckboxType::class, [
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez être majeur pour vous inscrire.',
+                    ]),
+                ],
+            ])
+            ->add('isTerms', CheckboxType::class, [
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter les CGU pour vous inscrire.',
+                    ]),
+                ],
+            ])
+            ->add('isGpdr', CheckboxType::class, [
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter notre politique RGPD pour vous inscrire.',
                     ]),
                 ],
             ])
