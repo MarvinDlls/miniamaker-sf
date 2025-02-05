@@ -32,6 +32,7 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('plainPassword', RepeatedType::class, [
+                'row_attr' => ['class' => 'mb-3' ],
                 'label' => 'Mot de passe',
                 'label_attr' => ['class' => 'form-label'],
                 'type' => PasswordType::class, // avec quoi tu es associé à la répétition
