@@ -21,6 +21,7 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('email', EmailType ::class, [
+                'row_attr' => ['class' => 'mb-3' ],
                 'label' => 'Votre adresse e-amil',
                 'label_attr' => [
                     'class' => 'form-label',
@@ -30,32 +31,22 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control',
                 ]
             ])
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-            ])
             ->add('plainPassword', RepeatedType::class, [
                 'label' => 'Mot de passe',
                 'label_attr' => ['class' => 'form-label'],
                 'type' => PasswordType::class, // avec quoi tu es associé à la répétition
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
                 'mapped' => false,
-                'attr' => ['class' => 'form-control'],
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmer le mot de passe'],
+                'first_options' => [
+                    'label_attr' => ['class' => 'form-label'],
+                    'label' => 'Mot de passe',
+                    'attr' => ['class' => 'form-control mb-3']
+                ],
+                'second_options' => [
+                    'label_attr' => ['class' => 'form-label'],
+                    'label' => 'Confirmer le mot de passe',
+                    'attr' => ['class' => 'form-control mb-3']
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Merci de saisir un mot de passe.',
@@ -69,6 +60,10 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('isMinor', CheckboxType::class, [
+                'row_attr' => ['class' => 'form-check'],
+                'label_attr' => ['class' => 'form-check-label'],
+                'attr' => ['class' => 'form-check-input'],
+                'label' => "Vous confirmez que vous êtes majeur.",
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez être majeur pour vous inscrire.',
@@ -76,6 +71,10 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('isTerms', CheckboxType::class, [
+                'row_attr' => ['class' => 'form-check'],
+                'label_attr' => ['class' => 'form-check-label'],
+                'attr' => ['class' => 'form-check-input'],
+                'label' => "Vous confirmez que vous avez lu les CGU.",
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter les CGU pour vous inscrire.',
@@ -83,6 +82,10 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('isGpdr', CheckboxType::class, [
+                'row_attr' => ['class' => 'form-check'],
+                'label_attr' => ['class' => 'form-check-label'],
+                'attr' => ['class' => 'form-check-input'],
+                'label' => "Vous confirmez que vous avez lu notre politique RGPD.",
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter notre politique RGPD pour vous inscrire.',
