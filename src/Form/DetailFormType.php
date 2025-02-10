@@ -14,6 +14,7 @@ class DetailFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('role')
             ->add('company_number')
             ->add('company_name')
             ->add('address')
@@ -21,19 +22,6 @@ class DetailFormType extends AbstractType
             ->add('postal_code')
             ->add('country')
             ->add('portfolio_link')
-            ->add('portfolio_check')
-            ->add('strikes')
-            ->add('is_banned')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('pro', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
         ;
     }
 
