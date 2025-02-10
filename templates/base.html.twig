@@ -21,7 +21,7 @@
     <body>
         {% for label, messages in app.flashes %}
             {% for message in messages %}
-                {{ include('components/nav/_partials/toast.html.twig', {
+                {{ include('components/_partials/toast.html.twig', {
                     'label': 'warning',
                     'message': message
                 }) }}
