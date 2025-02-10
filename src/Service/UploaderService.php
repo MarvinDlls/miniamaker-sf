@@ -18,7 +18,7 @@ class UploaderService
     public function uploadFile(UploadedFile $file, string $actualImage): string
     {
         try {
-            // $this->deleteFile($actualImage);
+            $this->deleteFile($actualImage);
             $fileName = uniqid() . '.' . $file->guessExtension();
             $file->move($this->parameterBag->get('upload_users_images'), $fileName);
 
