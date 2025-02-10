@@ -8,16 +8,16 @@ use DeviceDetector\DeviceDetector;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Classe de gestion de l'historique de connexion de l'utilisateur
+ * Classe de gestion de l'historique de connexion des utilisateurs
  */
 
 class LoginHistoryService
 {
-    public function __construct(readonly private EntityManagerInterface $em) {}
+    public function __construct(readonly private EntityManagerInterface $em){}
 
     public function addHistory(User $user, string $userAgent, string $ip): void
     {
-        $deviceDetector = new DeviceDetector('userAgent');
+        $deviceDetector = new DeviceDetector($userAgent);
         $deviceDetector->parse();
 
         $loginHistory = new LoginHistory();
@@ -27,7 +27,7 @@ class LoginHistoryService
             ->setDevice($deviceDetector->getDeviceName())
             ->setOs($deviceDetector->getOs()['name'])
             ->setBrowser($deviceDetector->getClient()['name'])
-        ;
+            ;
         $this->em->persist($loginHistory);
         $this->em->flush();
     }
