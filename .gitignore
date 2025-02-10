@@ -25,3 +25,7 @@
 ###< symfony/asset-mapper ###
 migrations/Version20250203115554.php
 migrations/Version20250203135230.php
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
