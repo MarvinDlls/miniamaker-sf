@@ -55,7 +55,16 @@
                                         {{ app.user.subscription.name ?? 'Aucun abonnement actuellement' }}
                                     </p>
                                     {% if app.user.subscription is null %}
-                                        <a href="#" class="btn btn-primary">S'abonner</a>
+                                    <form action="#" method="post">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token('app_subscribe') }}">
+                                        <div class="d-flex justify-content-between">
+                                            <select class="btn btn-secondary rounded">
+                                                <option value="990" name="annually">990&euro; /an</option>
+                                                <option value="90" name="monthly">99&euro; /mois</option>
+                                            </select>
+                                            <button class="btn btn-primary rounded" type="submit">S'abonner</button>
+                                        </div>
+                                    </form>
                                     {% endif %}
                                 </div>
                             </div>
@@ -71,10 +80,10 @@
                                         {{ app.user.detail.landingPages.name ?? 'Aucune landing pages actuellement' }}
                                     </p>
                                     {% if  app.user.detail is null %}
-                                        <a href="{{ path('lp_add') }}" class="btn btn-primary">Créer une page</a>
+                                        <a href="{{ path('lp_add') }}" class="btn btn-primary rounded">Créer une page</a>
                                     {% else %} 
                                         {% if app.user.detail.landingPages|length == 0 %}
-                                            <a href="{{ path('lp_add') }}" class="btn btn-primary">Créer une page</a>
+                                            <a href="{{ path('lp_add') }}" class="btn btn-primary rounded">Créer une page</a>
                                         {% endif %}
                                     {% endif %}
                                 </div>
