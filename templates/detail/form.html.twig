@@ -9,6 +9,10 @@
         <div class="card p-3">
             {{ form(detailForm) }}
         </div>
+        <a href="{{ path('app_profile') }}" class="btn btn-outlined-primary">
+            {{ ux_icon('mdi:arrow-left', { class: 'h-1 me-2 text-secondary' }) }}
+            Retour à mon profil
+        </a>
     </div>
 </div>
 {% endblock %}
