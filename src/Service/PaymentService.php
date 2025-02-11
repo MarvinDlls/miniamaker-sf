@@ -36,7 +36,7 @@ class PaymentService extends AbstractService
         $subscription
             ->setClient($user)
             ->setAmount($amount)
-            ->setFrequency($amount > 99 ? ('STRIPE_SUB_ANNUALLY') : ('STRIPE_SUB_MONTHLY'))
+            ->setFrequency($amount > 99 ? $this->params->get('STRIPE_SUB_ANNUALLY') : $this->params->get('STRIPE_SUB_MONTHLY'))
         ;
     }
 }
