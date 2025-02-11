@@ -34,9 +34,9 @@ class PaymentService extends AbstractService
 
         $subscription = new Subscription();
         $subscription
-            ->addClient($user)
+            ->setClient($user)
             ->setAmount($amount)
-            ->setFrequency($amount > 99 ? 'annually' : 'monthly')
+            ->setFrequency($amount > 99 ? ('STRIPE_SUB_ANNUALLY') : ('STRIPE_SUB_MONTHLY'))
         ;
     }
 }
