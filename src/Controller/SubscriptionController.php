@@ -13,18 +13,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class SubscriptionController extends AbstractController
 {
     #[Route('/subscription', name: 'app_subscription', methods: ['POST'])]
-    public function subscription(PaymentService $ps, Request $request): Response
+    public function subscription(Request $request, PaymentService $ps): Response
     {
         $subscription = $this->getUser()->getSubscription();
 
         if ($subscription == null || $subscription->isActive() === false) {
-            $ps->setPayment(
-                $this->getUser(),
+            $checkoutUrl = $ps->setPayment(
+                $this->getUser(), 
                 intval($request->get('plan'))
             );
-        } else {
-            $this->addFlash('warning', 'Vous êtes déjà abonné(e)');
-            return $this->redirectToRoute('app_profile');
+            return $this->redirect($checkoutUrl);
         }
+
+        $this->addFlash('warning', "Vous êtes déjà abonné(e)");
+        return $this->redirectToRoute('app_profile');
     }
 }

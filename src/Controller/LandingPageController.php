@@ -12,12 +12,13 @@ final class LandingPageController extends AbstractController
 {
     #[Route('/landing/add', name: 'lp_add')]
     public function add(): Response
-    {
+    {   
         $user = $this->getUser()->getRoles()[0];
-        if($user !== "ROLE_PRO" && $user !== "ROLE_AGENT")
-        {
-            return $this->redirectToRoute('app_detail');
+
+        if($user !== "ROLE_PRO" && $user !== "ROLE_AGENT") {
+                return $this->redirectToRoute('app_detail');
         }
+        
         return $this->render('landing_page/index.html.twig', [
             'controller_name' => 'LandingPageController',
         ]);
