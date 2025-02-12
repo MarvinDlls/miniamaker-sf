@@ -29,3 +29,5 @@ migrations/Version20250203135230.php
 ###> liip/imagine-bundle ###
 /public/media/cache/
 ###< liip/imagine-bundle ###
+.DS_Store
+.DS_Store
