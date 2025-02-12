@@ -53,4 +53,4 @@ class AddUserCommand extends Command
 
         return Command::SUCCESS;
     }
-}             
+}
