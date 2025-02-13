@@ -22,41 +22,46 @@ class PaymentService
     ) {}
 
     public function setPayment(User $user, int $amount): string
-    {
-        Stripe::setApiKey($this->params->get('STRIPE_SK'));
+{
+    Stripe::setApiKey($this->params->get('STRIPE_SK'));
 
-        $subscription = new Subscription();
-        $subscription
-            ->setClient($user)
-            ->setAmount($amount)
-            ->setFrequency($amount > 99 ? 'year' : 'month')
-        ;
+    $subscription = new Subscription();
+    $subscription
+        ->setClient($user)
+        ->setAmount($amount)
+        ->setFrequency($amount > 99 ? 'year' : 'month')
+        ->setIsActive(true)  // Ajoutez ceci
+    ;
 
-        try {
-            $checkout_session = Session::create([
-                'payment_method_types' => ['card'], // Setup du moyen de paiment
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'eur', // Setup de la devise
-                        'unit_amount' => $amount * 100, // Montant en centimes
-                        'recurring' => [ // recurrence de l'abonnement
-                            'interval' => $subscription->getFrequency(), // mois ou année
-                        ],
-                        'product_data' => [ // Infos sur le produit
-                            'name' => 'Abonnement miniamaker', // Texte affiché sur la page de paiement
-                        ],
+    try {
+        $checkout_session = Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => $amount * 100,
+                    'recurring' => [
+                        'interval' => $subscription->getFrequency(),
                     ],
-                    'quantity' => 1, // Qt obligatoire
-                ]],
-                'mode' => 'subscription',
-                'success_url' => $this->params->get('APP_URL') . '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => $this->params->get('APP_URL') . '/subscription/cancel',
-            ]);
+                    'product_data' => [
+                        'name' => 'Abonnement miniamaker',
+                    ],
+                ],
+                'quantity' => 1,
+            ]],
+            'mode' => 'subscription',
+            'success_url' => $this->params->get('APP_URL') . '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => $this->params->get('APP_URL') . '/subscription/cancel',
+            'client_reference_id' => $user->getId(),
+        ]);
 
-            return $checkout_session->url ?? 'TEST';
-        } catch (\Throwable $th) {
-            echo $th->getMessage() . PHP_EOL;
-            echo json_encode(['error' => $th->getMessage()]);
-        }
+        // Sauvegardez l'abonnement en base
+        $this->em->persist($subscription);
+        $this->em->flush();
+
+        return $checkout_session->url ?? 'TEST';
+    } catch (\Throwable $th) {
+        throw $th;
     }
+}
 }
