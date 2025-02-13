@@ -118,7 +118,7 @@ class UserFormType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Modifier mon profil',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-primary rounded'],
             ])
         ;
     }

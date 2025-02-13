@@ -1,0 +1,18 @@
+<h1>Bonjour {{ user.username }}!</h1>
+
+<p>
+    Nous avons détecté une nouvelle connexion à votre compte.
+</p>
+
+<h3>Détails de la connexion :</h3>
+<ul>
+    <li>Adresse IP : {{ loginHistory.ipAddress|default('N/A') }}</li>
+    <li>Appareil : {{ loginHistory.device|default('N/A') }}</li>
+    <li>Système d'exploitation : {{ loginHistory.os|default('N/A') }}</li>
+    <li>Navigateur : {{ loginHistory.browser|default('N/A') }}</li>
+</ul>
+
+<p>
+    Cordialement,<br>
+    L'équipe miniamaker
+</p>

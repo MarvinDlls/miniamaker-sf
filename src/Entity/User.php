@@ -64,9 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
-    #[ORM\ManyToOne(inversedBy: 'clients')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Subscription $subscription = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
@@ -76,6 +73,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: LoginHistory::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $loginHistories;
+
+    #[ORM\OneToOne(mappedBy: 'client', cascade: ['persist', 'remove'])]
+    private ?Subscription $subscription = null;
+
+    /**
+     * @var Collection<int, Message>
+     */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'user')]
+    private Collection $messages;
+
+    /**
+     * @var Collection<int, Discussion>
+     */
+    #[ORM\OneToMany(targetEntity: Discussion::class, mappedBy: 'sender')]
+    private Collection $discussions;
 
     /**
      * Constructeur pour gérer les 
@@ -88,6 +100,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->is_gpdr = false;
         $this->loginHistories = new ArrayCollection();
         $this->image = "default.png";
+        $this->messages = new ArrayCollection();
+        $this->discussions = new ArrayCollection();
     }
     
     #[ORM\PrePersist]
@@ -291,23 +305,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSubscription(): ?Subscription
-    {
-        return $this->subscription;
-    }
-
-    public function setSubscription(Subscription $subscription): static
-    {
-        // set the owning side of the relation if necessary
-        if ($subscription->getClients() !== $this) {
-            $subscription->addClient($this);
-        }
-
-        $this->subscription = $subscription;
-
-        return $this;
-    }
-
     public function getImage(): ?string
     {
         return $this->image;
@@ -316,7 +313,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getPathImage(): ?string
     {
         if ($this->image == 'default.png' || $this->image == null) {
-            return '/medias/images/users/default.png';
+            return '/medias/images/default.png';
         }
         return '/medias/images/users/' . $this->image;
     }
@@ -365,5 +362,82 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return false;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(Subscription $subscription): static
+    {
+        // set the owning side of the relation if necessary
+        if ($subscription->getClient() !== $this) {
+            $subscription->setClient($this);
+        }
+
+        $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Discussion>
+     */
+    public function getDiscussions(): Collection
+    {
+        return $this->discussions;
+    }
+
+    public function addDiscussion(Discussion $discussion): static
+    {
+        if (!$this->discussions->contains($discussion)) {
+            $this->discussions->add($discussion);
+            $discussion->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiscussion(Discussion $discussion): static
+    {
+        if ($this->discussions->removeElement($discussion)) {
+            // set the owning side to null (unless already changed)
+            if ($discussion->getSender() === $this) {
+                $discussion->setSender(null);
+            }
+        }
+
+        return $this;
     }
 }
