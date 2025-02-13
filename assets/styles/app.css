@@ -49,6 +49,25 @@ h1, h2, h3, h4, h5, h6 {
     font-family: "Lexend Mega", sans-serif;
 }
 
+.page-container {
+    min-height: 89vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrap {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+.jumbotron {
+    padding: 4rem 2rem;
+    background-color: #f8f9fa;
+}
+
 .help {
     font-size: 0.85rem;
     color: #555;
