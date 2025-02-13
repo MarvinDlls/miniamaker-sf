@@ -6,10 +6,10 @@
 
 <h3>Détails de la connexion :</h3>
 <ul>
-    <li>Adresse IP : {{ loginHistory.ipAddress }}</li>
-    <li>Appareil : {{ loginHistory.device }}</li>
-    <li>Système d'exploitation : {{ loginHistory.os }}</li>
-    <li>Navigateur : {{ loginHistory.browser }}</li>
+    <li>Adresse IP : {{ loginHistory.ipAddress|default('N/A') }}</li>
+    <li>Appareil : {{ loginHistory.device|default('N/A') }}</li>
+    <li>Système d'exploitation : {{ loginHistory.os|default('N/A') }}</li>
+    <li>Navigateur : {{ loginHistory.browser|default('N/A') }}</li>
 </ul>
 
 <p>
