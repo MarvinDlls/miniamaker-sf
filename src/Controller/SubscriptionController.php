@@ -28,7 +28,6 @@ final class SubscriptionController extends AbstractController
                     intval($request->get('plan'))
                 );
                 return $this->redirectToRoute('app_subscription_check', ['link' => $checkoutUrl]);
-                // return new RedirectResponse($checkoutUrl);
             }
 
             $this->addFlash('warning', "Vous êtes déjà abonné(e)");
@@ -49,8 +48,8 @@ final class SubscriptionController extends AbstractController
     }
 
     #[Route('/subscription/success', name: 'app_subscription_success')]
-public function success(Request $request, EntityManagerInterface $entityManager): Response
-{
+    public function success(Request $request, EntityManagerInterface $entityManager): Response
+    {
     $sessionId = $request->query->get('session_id');
     
     if ($sessionId) {
@@ -70,7 +69,7 @@ public function success(Request $request, EntityManagerInterface $entityManager)
 
     $this->addFlash('success', 'Votre abonnement a été pris en compte');
     return $this->redirectToRoute('app_profile');
-}
+    }
 
     #[Route('/subscription/cancel', name: 'app_subscription_cancel')]
     public function cancel(): Response
