@@ -49,6 +49,7 @@ final class SubscriptionController extends AbstractController
     public function success(Request $request): Response
     {
         // Logique de traitement du succès
+        $this->addFlash('success', 'Votre abonnement a été pris en compte');
         return $this->redirectToRoute('app_profile');
     }
 
@@ -56,6 +57,7 @@ final class SubscriptionController extends AbstractController
     public function cancel(): Response
     {
         // Logique de traitement de l'annulation
+        $this->addFlash('warning', 'Votre abonnement n\'a pas été pris en compte');
         return $this->redirectToRoute('app_profile');
     }
 }
