@@ -29,7 +29,7 @@
                         Ma page de profil public
                     </a>
                 </p>
-                 <p class="help text-left">Abonnée depuis {{ app.user.subscription.createdAT|time_diff }}</p>
+                 <p class="help text-left">Abonnée depuis {{ app.user.subscription ? app.user.subscription.createdAt|time_diff : 'N/A' }}</p>
                 <hr>
                 <p class="help text-center">Compte créé il y a {{ app.user.createdAt|time_diff }}</p>
             </div>
