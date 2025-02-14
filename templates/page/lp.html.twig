@@ -16,7 +16,7 @@
             <h1 class="text-3xl">
                 Mettez vos efforts dans votre contenu, les pros s'occupent du reste.
             </h1>
-            <a href="{{ path('app_login') }}" class="btn btn-primary">
+            <a href="{{ path('app_register') }}" class="btn btn-primary rounded">
                 Créer un compte gratuitement
             </a>
         </div>
@@ -26,4 +26,86 @@
         {% include 'components/boxes.html.twig' %}
     </section>
 
+    <!-- Fonctionnalités Clés -->
+    <section class="container py-5">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <h3>Montage Vidéo</h3>
+                <p>Profitez de services de montage vidéo professionnels pour tous vos projets.</p>
+                <img src="https://i.ytimg.com/vi/xdIEKpu9c2c/maxresdefault.jpg" alt="Netflix" class="rounded" width="200">
+            </div>
+            <div class="col-md-4">
+                <h3>Design de Site Web</h3>
+                <p>Créez un site web attrayant et fonctionnel avec nos experts en design.</p>
+                <img src="https://www.creads.com/wp-content/uploads/2021/05/2-2-2.jpg" alt="Netflix" class="rounded" width="200">
+            </div>
+            <div class="col-md-4">
+                <h3>Support 24/7</h3>
+                <p>Notre équipe est disponible à tout moment pour vous aider.</p>
+                <img src="https://i.topito.com/8gZFa0uP0cJKS_TLITNK7rS4wDVdCddfXUd5nE4BMPY=/1340x754/smart/filters:fill(white):format(webp):quality(70)/https%3A%2F%2Fmedia.topito.com%2Fwp-content%2Fuploads%2F2009%2F07%2FSAV_EMISSION.jpg" alt="Netflix" class="rounded" width="200">
+            </div>
+        </div>
+    </section>
+
+    <!-- Témoignages -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Ce que disent nos utilisateurs</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <p>"Service incroyable ! Mon site est superbe grâce à eux."</p>
+                    <p>- Jean D.</p>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPjbdfGSzDZuyAXD_qXbWeZm0bPXikRXZUAA&s" alt="Netflix" class="rounded" width="200">
+                </div>
+                <div class="col-md-4 text-center">
+                    <p>"Le montage vidéo était parfait pour mon projet."</p>
+                    <p>- Marie L.</p>
+                    <img src="https://i1.sndcdn.com/artworks-000214647759-1fbx26-t500x500.jpg" alt="Netflix" class="rounded" width="200">
+                </div>
+                <div class="col-md-4 text-center">
+                    <p>"Très satisfait du support client, toujours réactif."</p>
+                    <p>- Paul R.</p>
+                    <img src="https://us-tuna-sounds-images.voicemod.net/523b7fd6-b8a6-41e6-9340-9fe0e19d91a0-1704514833378.jpg" alt="Netflix" class="rounded" width="200">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partenaires ou Clients -->
+    <section class="container py-5 text-center">
+        <h2 class="mb-4">Nos partenaires</h2>
+        <div class="row">
+            <div class="col">
+                <img src="https://api.iconify.design/logos:netflix.svg?color=%23000000" alt="Netflix" width="150">
+            </div>
+            <div class="col">
+                <img src="https://api.iconify.design/logos:microsoft.svg?color=%23000000" alt="Microsoft" width="150">
+            </div>
+            <div class="col">
+                <img src="https://api.iconify.design/logos:discord.svg?color=%23000000" alt="Discord" width="150">
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog ou Actualités -->
+    <section class="container py-5">
+        <h2 class="text-center mb-4">Dernières actualités</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Nouveautés en design web</h4>
+                <p>Découvrez les dernières tendances en design web.</p>
+                <a href="#" class="btn btn-link">Lire plus</a>
+            </div>
+            <div class="col-md-4">
+                <h4>Conseils pour le montage vidéo</h4>
+                <p>Apprenez à améliorer vos compétences en montage vidéo.</p>
+                <a href="#" class="btn btn-link">Lire plus</a>
+            </div>
+            <div class="col-md-4">
+                <h4>Événements à venir</h4>
+                <p>Participez à nos prochains événements et webinaires.</p>
+                <a href="#" class="btn btn-link">Lire plus</a>
+            </div>
+        </div>
+    </section>
 {% endblock %}

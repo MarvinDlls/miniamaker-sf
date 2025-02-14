@@ -13,10 +13,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $em,
+    ){}
     #[Route('/profile', name: 'app_profile', methods: ['GET', 'POST'])]
     public function index(
         Request $request, 
-        EntityManagerInterface $em,
         UploaderService $us,
         UserPasswordHasherInterface $passwordHasher
         ): Response
@@ -44,8 +46,8 @@ final class UserController extends AbstractController
                     );
                 }
 
-                $em->persist($user);
-                $em->flush();
+                $this->em->persist($user);
+                $this->em->flush();
                 
                 // Redirection avec flash message
                 $this->addFlash('success', 'Votre profil à été mis à jour');
