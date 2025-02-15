@@ -17,7 +17,7 @@ final class Salutation
         } elseif ($hour >= 18 && $hour < 23) { // Entre 18h et 23h
             return 'Bonsoir';
         } else { // Sinon
-            return 'Il est tard fraté 😩';
+            return 'Il est tard le sang 😩';
         }
     }
 }
